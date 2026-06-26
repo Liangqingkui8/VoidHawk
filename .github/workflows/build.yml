@@ -10,11 +10,27 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [windows, linux, macos]
-        arch: [amd64, arm64]
-        exclude:
-          - os: windows
-            arch: arm64
+        include:
+          - goos: windows
+            goarch: amd64
+            display: windows
+            ext: .exe
+          - goos: linux
+            goarch: amd64
+            display: linux
+            ext: ""
+          - goos: linux
+            goarch: arm64
+            display: linux-arm64
+            ext: ""
+          - goos: darwin
+            goarch: amd64
+            display: macos
+            ext: ""
+          - goos: darwin
+            goarch: arm64
+            display: macos-arm64
+            ext: ""
 
     runs-on: ubuntu-latest
     steps:
@@ -26,17 +42,15 @@ jobs:
 
       - name: 编译
         run: |
-          ext=""
           tag="${{ github.ref_name }}"
           [ "$tag" = "main" ] && tag="dev"
-          [ "${{ matrix.os }}" = "windows" ] && ext=".exe"
-          name="voidhawk_${tag}_${{ matrix.os }}_${{ matrix.arch }}${ext}"
-          GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -ldflags="-s -w" -o "$name" .
+          name="voidhawk_${tag}_${{ matrix.display }}${{ matrix.ext }}"
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -ldflags="-s -w" -o "$name" .
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
-          name: voidhawk_${{ matrix.os }}_${{ matrix.arch }}
+          name: voidhawk_${{ matrix.display }}
           path: voidhawk_*
 
   release:
