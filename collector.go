@@ -1147,22 +1147,33 @@ func (c *Collector) buildRequest(rawurl, method string, body io.Reader, headers 
 		req.Header.Set("Host", req.URL.Host)
 		req.Header.Set("Connection", "keep-alive")
 		req.Header.Set("Cache-Control", "max-age=0")
-		req.Header.Set("sec-ch-ua", `"Chromium";v="125", "Not.A/Brand";v="24", "Google Chrome";v="125"`)
-		req.Header.Set("sec-ch-ua-mobile", "?0")
-		req.Header.Set("sec-ch-ua-platform", `"Windows"`)
-		req.Header.Set("Upgrade-Insecure-Requests", "1")
-		req.Header.Set("User-Agent", getUAForTarget(c.rootURL))
-		req.Header.Set("Accept", randomAccept())
+		ua := randomUA()
+		switch {
+		case strings.Contains(ua, "Firefox"):
+			req.Header.Set("User-Agent", ua)
+			req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+			req.Header.Set("Upgrade-Insecure-Requests", "1")
+		case strings.Contains(ua, "iPhone") || strings.Contains(ua, "iPad"):
+			req.Header.Set("User-Agent", ua)
+			req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+		default:
+			req.Header.Set("sec-ch-ua", `"Chromium";v="125", "Not.A/Brand";v="24", "Google Chrome";v="125"`)
+			req.Header.Set("sec-ch-ua-mobile", "?0")
+			req.Header.Set("sec-ch-ua-platform", `"Windows"`)
+			req.Header.Set("Upgrade-Insecure-Requests", "1")
+			req.Header.Set("User-Agent", ua)
+			req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
+		}
+		req.Header.Set("Accept-Encoding", randomAcceptEncoding())
+		req.Header.Set("Accept-Language", randomAcceptLanguage())
 		req.Header.Set("Sec-Fetch-Site", "same-origin")
 		req.Header.Set("Sec-Fetch-Mode", "navigate")
 		req.Header.Set("Sec-Fetch-User", "?1")
 		req.Header.Set("Sec-Fetch-Dest", "document")
-		req.Header.Set("Accept-Encoding", randomAcceptEncoding())
-		req.Header.Set("Accept-Language", randomAcceptLanguage())
 		for k, v := range headers { req.Header.Set(k, v) }
 		if strings.Contains(rawurl, c.rootURL) { req.Header.Set("Referer", c.rootURL) }
 	} else {
-		req.Header.Set("User-Agent", getUAForTarget(c.rootURL))
+		req.Header.Set("User-Agent", randomUA())
 		req.Header.Set("Accept", randomAccept())
 		req.Header.Set("Accept-Encoding", randomAcceptEncoding())
 		req.Header.Set("Accept-Language", randomAcceptLanguage())
