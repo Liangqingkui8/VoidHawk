@@ -1,0 +1,8 @@
+*.exe
+*.test
+*.out
+*.tmp
+pocs/
+waf_cache.json
+scan_cache.json
+result.json
