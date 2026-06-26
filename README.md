@@ -90,16 +90,11 @@ voidhawk.exe -target https://target.com -detect-honeypot
 
 ---
 
-## 📂 你需要准备的
+## 📂 字典
 
-扫目标之前，丢两本字典扔 exe 同目录：
+仓库自带了 `subdomains.txt`（72条常用子域名）和 `directories.txt`（85条常见路径），clone 下来直接用。
 
-```
-subdomains.txt   — 子域名列表
-directories.txt  — 目录列表
-```
-
-推荐去嫖 [SecLists](https://github.com/danielmiessler/SecLists)，或者自己攒。
+想扫得更全可以去嫖 [SecLists](https://github.com/danielmiessler/SecLists) 替换掉自带的。
 
 ---
 
