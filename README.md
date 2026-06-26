@@ -9,12 +9,29 @@ VoidHawk 是一个看见目标就想把它翻个底朝天的 Web 信息收集工
 ## 🚀 安装
 
 ```bash
-git clone https://github.com/你的用户名/VoidHawk
+git clone https://github.com/Liangqingkui8/VoidHawk
 cd VoidHawk
-go build -o voidhawk.exe .
+go build -o voidhawk .
 ```
 
 需要 Go 1.21+。别的不用装，除了 Chromium（如果你要用 JS 渲染的话）。
+
+**跨平台编译（在 Windows 上编译 Linux/Mac 版）：**
+
+```bash
+# Linux 64位
+GOOS=linux GOARCH=amd64 go build -o voidhawk .
+
+# Mac Intel
+GOOS=darwin GOARCH=amd64 go build -o voidhawk .
+
+# Mac M1/M2
+GOOS=darwin GOARCH=arm64 go build -o voidhawk .
+
+# 或者用一键脚本
+chmod +x build.sh
+./build.sh v1.0.0
+```
 
 ---
 
