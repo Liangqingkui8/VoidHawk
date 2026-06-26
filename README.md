@@ -18,6 +18,8 @@ go build -o voidhawk .
 
 需要 Go 1.21+。别的不用装，除了 Chromium（如果你要用 JS 渲染的话）。
 
+也可以去 [Releases](https://github.com/Liangqingkui8/VoidHawk/releases) 页面直接下载编译好的 exe。
+
 **跨平台编译（在 Windows 上编译 Linux/Mac 版）：**
 
 ```bash
@@ -40,23 +42,23 @@ chmod +x build.sh
 ## 🎯 快速上手
 
 ```bash
-# 正常扫（需要字典）
-voidhawk.exe -target example.com -sub subdomains.txt -dir directories.txt
+# 全量扫描（自带字典，clone 即用）
+voidhawk -target example.com -no-ctlog
 
-# 看目标开了哪些门
-voidhawk.exe -target https://target.com -port-scan -no-ctlog
+# 只看开了哪些门
+voidhawk -target https://target.com -port-scan -no-ctlog
 
 # 带着 Cookie 测鉴权
-voidhawk.exe -target https://target.com -cookie "session=abc123"
+voidhawk -target https://target.com -cookie "session=abc123"
 
 # 隐身模式——WAF 最好别注意到你
-voidhawk.exe -target https://target.com -stealth -rate 10 -threads 5
+voidhawk -target https://target.com -stealth -rate 10 -threads 5
 
-# 带浏览器渲染（需要电脑里有 Chromium）
-voidhawk.exe -target https://target.com -render
+# 带浏览器渲染（需要本地有 Chromium）
+voidhawk -target https://target.com -render
 
 # 蜜罐检测——看看对面是不是在演你
-voidhawk.exe -target https://target.com -detect-honeypot
+voidhawk -target https://target.com -detect-honeypot
 ```
 
 **常用参数：**
@@ -86,7 +88,7 @@ voidhawk.exe -target https://target.com -detect-honeypot
 - **端口扫描** — 常见 Web 端口，轻量不扰民
 - **鉴权检测** — 未授权访问 / 越权 / IDOR，Cookie 一挂自动扫
 - **绕过测试** — HTTP 方法变异、路径混淆、伪造请求头，总有一个姿势能进门
-- **隐身模式** — JA3 指纹随机化、自适应降速、代理轮换，WAF 看了想叹气
+- **隐身模式** — 每次请求随机切换 Chrome/Firefox/Safari 浏览器画像，JA3 TLS 指纹随机化，UA 随机轮换，自适应降速，代理轮换，WAF 看了想骂娘
 - **蜜罐检测** — 点一下就知道对面是不是在钓鱼
 - **增量扫描** — 今天扫了明天再扫，只出新结果
 
@@ -97,6 +99,18 @@ voidhawk.exe -target https://target.com -detect-honeypot
 仓库自带了 `subdomains.txt`（72条常用子域名）和 `directories.txt`（85条常见路径），clone 下来直接用。
 
 想扫得更全可以去嫖 [SecLists](https://github.com/danielmiessler/SecLists) 替换掉自带的。
+
+---
+
+## 🤖 自动构建
+
+每次 push 到 main 分支，GitHub Actions 自动编译 5 个平台的版本：
+
+- Windows amd64
+- Linux amd64 / arm64
+- macOS amd64 / arm64
+
+打 Release 时，编译产物自动上传到 Release 页面，可以直接下载。
 
 ---
 
