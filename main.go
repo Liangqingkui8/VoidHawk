@@ -47,6 +47,8 @@ func main() {
 	detectHoneypot := flag.Bool("detect-honeypot", false, "蜜罐检测")
 
 	flag.Parse()
+	printBanner()
+
 	if *target == "" {
 		log.Fatal("必须指定 -target")
 	}
