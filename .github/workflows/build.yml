@@ -27,10 +27,11 @@ jobs:
       - name: 编译
         run: |
           ext=""
-          if [ "${{ matrix.os }}" = "windows" ]; then ext=".exe"; fi
-          name="voidhawk_${{ github.ref_name }}_${{ matrix.os }}_${{ matrix.arch }}${ext}"
+          tag="${{ github.ref_name }}"
+          [ "$tag" = "main" ] && tag="dev"
+          [ "${{ matrix.os }}" = "windows" ] && ext=".exe"
+          name="voidhawk_${tag}_${{ matrix.os }}_${{ matrix.arch }}${ext}"
           GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -ldflags="-s -w" -o "$name" .
-          echo "name=$name" >> $GITHUB_ENV
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
@@ -42,12 +43,15 @@ jobs:
     if: github.event_name == 'release'
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/download-artifact@v4
         with:
           path: artifacts
 
-      - name: 上传到 Release 页面
-        uses: softprops/action-gh-release@v2
-        with:
-          files: artifacts/*/*
+      - name: 上传到 Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          find artifacts -type f -exec gh release upload ${{ github.ref_name }} {} \;
