@@ -1,5 +1,7 @@
 # 🦅 VoidHawk
 
+![build](https://github.com/Liangqingkui8/VoidHawk/actions/workflows/build.yml/badge.svg)
+
 **你站得再高，也躲不过这只鹰。**
 
 VoidHawk 是一个看见目标就想把它翻个底朝天的 Web 信息收集工具。子域名、目录、API、鉴权漏洞、IDOR、绕过姿势，它全干，而且不挑食。
